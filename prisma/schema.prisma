@@ -1,14 +1,48 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+enum Role {
+  user
+  admin
+}
+
+model User {
+  id              Int     @id @default(autoincrement())
+  name            String
+  email           String  @unique
+  password        String
+  role            Role    @default(user)
+  quizzes         Quiz[]
+}
+
+model Quiz {
+  id              Int     @id @default(autoincrement())
+  title           String
+  description     String?
+  is_once         Boolean
+  creator         User    @relation(fields: [created_by], references: [id])
+  created_by      Int
+  questions       Question[]
+}
+
+model Question {
+  id              Int     @id @default(autoincrement())
+  question        String
+  quiz            Quiz    @relation(fields: [quiz_id], references: [id])
+  quiz_id         Int
+  choices         Choice[]
+}
+
+model Choice {
+  id              Int     @id @default(autoincrement())
+  choice          String
+  is_correct      Boolean
+  question        Question @relation(fields: [question_id], references: [id])
+  question_id     Int
 }
