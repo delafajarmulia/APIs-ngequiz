@@ -6,14 +6,17 @@ export const getUserByEmail = async(email) => {
             email: email,
         },
         select: {
-            id: true
+            id: true,
+            email: true,
+            password: true,
+            role:true
         }
     })
 
     return user
 }
 
-export const register = async(passwordHashing, newUser) => {
+export const createNewUser = async(passwordHashing, newUser) => {
     const userAdded = await prisma.user.create({
         data: {
             name: newUser.name,

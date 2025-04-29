@@ -1,13 +1,12 @@
-import express from 'express'
-import { registerValidation } from './user.validation.js'
 import { validationResult } from 'express-validator'
 import { response } from '../../utils/response.js'
-import { getUserByEmail, register } from './user.repository.js'
+import { getUserByEmail, createNewUser } from './user.repository.js'
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
-export const router = express.Router()
+const jwtSecret = process.env.JWT_SECRET
 
-router.post('/register', registerValidation, async (req, res) => {
+export const register = async (req, res) => {
     try {
         const user = req.body;
 
@@ -23,11 +22,45 @@ router.post('/register', registerValidation, async (req, res) => {
         }
 
         const passwordHashing = await bcrypt.hash(user.password, 10)
-        const newUser = await register(passwordHashing, user)
+        const newUser = await createNewUser(passwordHashing, user)
        
         return response(200, newUser, 'Successfully add new user', res);
     } catch (error) {
         console.log(error);
         return response(500, null, 'Internal server error', res);
     }
-});
+}
+
+export const login = async(req, res) => {
+    try {
+        const user = req.body
+        const pw = user.password
+
+        const isErrorValidation = validationResult(req)
+        if(!isErrorValidation.isEmpty()){
+            return response(422, isErrorValidation.array(), 'Validation error', res)
+        }
+
+        const userAvailabled = await getUserByEmail(user.email)
+        if(!userAvailabled){
+            return response(404, [], 'User does not exist', res)
+        }
+
+        const passwordCheck = await bcrypt.compare(pw, userAvailabled.password)
+        if(!passwordCheck){
+            return response(401, [], 'Invalid password', res)
+        }
+
+        const payload = {
+            id: userAvailabled.id,
+            email: userAvailabled.email,
+            role: userAvailabled.role
+        }
+
+        const token = jwt.sign(payload, jwtSecret, {expiresIn: "1h"})
+
+        return response(200, token, 'Successfully login', res)
+    } catch (error) {
+        res.send(error)
+    }
+}

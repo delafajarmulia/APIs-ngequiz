@@ -19,3 +19,16 @@ export const registerValidation = [
         }).withMessage('Password minimal 8 charachter'),
     body('role', 'Role is required').notEmpty()
 ]
+
+export const loginValidation = [
+    body('email', 'Email is required')
+        .notEmpty()
+        .trim()
+        .isEmail().withMessage('Please input valid Email'),
+    body('password', 'Password is required')
+        .notEmpty()
+        .trim()
+        .isLength({
+            min: 8
+        }).withMessage('Password minimal 8 charachter'),
+]
