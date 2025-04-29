@@ -5,7 +5,7 @@ export const createQuiz = async(creatorId, newQuiz) => {
         data:{
             title: newQuiz.title,
             description: newQuiz.description,
-            is_once: newQuiz.is_once,
+            is_once: newQuiz.is_once === 'true',
             created_by: creatorId
         }
     })

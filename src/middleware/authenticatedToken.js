@@ -1,4 +1,4 @@
-import { response } from 'express'
+import { response } from '../utils/response.js'
 import jwt from 'jsonwebtoken'
 
 const jwtSecret = process.env.JWT_SECRET
