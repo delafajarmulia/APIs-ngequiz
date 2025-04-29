@@ -12,3 +12,13 @@ export const createQuiz = async(creatorId, newQuiz) => {
 
     return quizAdded
 }
+
+export const getQuizById = async(id) => {
+    const quizResult = await prisma.quiz.findFirst({
+        where: {
+            id: id
+        }
+    })
+
+    return quizResult
+}

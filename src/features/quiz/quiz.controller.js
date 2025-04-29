@@ -1,6 +1,6 @@
 import { response } from "../../utils/response.js"
 import { validationResult } from "express-validator"
-import { createQuiz } from "./quiz.repository.js"
+import { createQuiz, getQuizById } from "./quiz.repository.js"
 
 export const makeQuiz = async(req, res) => {
     try {
@@ -18,4 +18,14 @@ export const makeQuiz = async(req, res) => {
     } catch (error) {
         return res.send(error)
     }
+}
+
+export const takeQuiz = async(req, res) => {
+    const id = parseInt(req.params.id)
+    const quiz = await getQuizById(id)
+
+    if(!quiz){
+        return response(404, [], 'Quiz not found', res)
+    }
+    return response(200, quiz, 'Get quiz by ID', res)
 }
