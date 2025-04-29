@@ -1,6 +1,6 @@
 import { validationResult } from 'express-validator'
 import { response } from '../../utils/response.js'
-import { getUserByEmail, createNewUser } from './user.repository.js'
+import { getUserByEmail, createNewUser } from './auth.repository.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
