@@ -1,11 +1,8 @@
 import prisma from "../../db/index.js"
 
 export const creatQuestion = async(newQuestion) => {
-    const questionAdded = await prisma.question.create({
-        data:{
-            question: newQuestion.question,
-            quiz_id: parseInt(newQuestion.quiz_id)
-        }
+    const questionAdded = await prisma.question.createMany({
+        data: newQuestion
     })
 
     return questionAdded
