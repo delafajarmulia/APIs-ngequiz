@@ -22,7 +22,11 @@ export const makeQuestion = async(req, res) => {
             return response(404, [], 'Quiz not found', res)
         }
 
-        const questionAdded = await creatQuestion(data)
+        const normalizedData = data.map(question => ({
+            question: question.question,
+            quiz_id: parseInt(question.quiz_id)
+        }))
+        const questionAdded = await creatQuestion(normalizedData)
 
         return response(200, questionAdded, 'Successfully add new question', res)
     } catch (error) {
