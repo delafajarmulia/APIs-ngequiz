@@ -17,6 +17,13 @@ export const getQuizById = async(id) => {
     const quizResult = await prisma.quiz.findFirst({
         where: {
             id: id
+        },
+        include:{
+            questions:{
+                include:{
+                    choices: true
+                }
+            }
         }
     })
 
