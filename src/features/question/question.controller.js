@@ -33,3 +33,17 @@ export const makeQuestion = async(req, res) => {
         return res.send(error)
     }
 }
+
+// export const seeAllQuestion = async(req, res) => {
+//     try {
+//         const questions = await getAllQuestion()
+
+//         if(!questions){
+//             return response(404, [], 'Question not available', res)
+//         }
+
+//         return response(200, questions, 'See all question', res)
+//     } catch (error) {
+//         return res.send(error)
+//     }
+// }

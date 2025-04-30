@@ -22,3 +22,17 @@ export const getQuizById = async(id) => {
 
     return quizResult
 }
+
+export const getAllQuiz = async() => {
+    const quizzes = await prisma.quiz.findMany({
+        include:{
+            creator:{
+                select: {
+                    name:true
+                }
+            }
+        }
+    })
+
+    return quizzes
+}

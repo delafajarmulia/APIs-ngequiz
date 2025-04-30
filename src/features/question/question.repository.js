@@ -17,3 +17,19 @@ export const getQuestionById = async(id) => {
 
     return question
 }
+
+// export const getAllQuestion = async() => {
+//     // const questions = await prisma.question.findMany({
+//     //     include:{
+//     //         users: true
+//     //     }
+//     // })
+
+//     const questions = await prisma.question.findMany({
+//         include:{
+//             quiz: true
+//         }
+//     })
+
+//     return questions
+// }

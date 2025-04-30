@@ -6,3 +6,4 @@ import { makeQuestion } from './question.controller.js'
 export const router = express.Router()
 
 router.post('/', authenticatedToken, questionValidator, makeQuestion)
+// router.get('/', authenticatedToken, seeAllQuestion)
