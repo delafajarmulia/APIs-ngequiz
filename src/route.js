@@ -2,10 +2,11 @@ import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
 
-import {router as userRoute } from './features/auth/auth.route.js'
+import {router as authRoute } from './features/auth/auth.route.js'
 import { router as quizRoute } from './features/quiz/quiz.route.js'
 import { router as choiceRoute } from './features/choice/choice.route.js'
 import { router as questionRoute } from './features/question/question.route.js'
+import { router as userRoute } from './features/user/user.route.js'
 
 dotenv.config()
 const app = express()
@@ -18,10 +19,11 @@ app.use(express.json())
 
 const mainURL = '/api/v1'
 
-app.use(mainURL + '/user/auth', userRoute)
+app.use(mainURL + '/user/auth', authRoute)
 app.use(mainURL + '/quiz', quizRoute)
 app.use(mainURL + '/question', questionRoute)
 app.use(mainURL + '/choice', choiceRoute)
+app.use(mainURL + '/user', userRoute)
 
 app.listen(port, () => {
     console.log(`This server running on port ${port}`)

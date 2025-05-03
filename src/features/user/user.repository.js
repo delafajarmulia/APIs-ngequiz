@@ -6,7 +6,9 @@ export const getUserByID = async(id) => {
             id: id
         }, 
         select: {
-            id: true
+            id: true,
+            name: true,
+            role: true
         }
     })
 
