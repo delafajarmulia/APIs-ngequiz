@@ -43,3 +43,17 @@ export const getAllQuiz = async() => {
 
     return quizzes
 }
+
+export const getMyQuiz = async(userId) => {
+    const quizzes = await prisma.quiz.findMany({
+        where: {
+            created_by: userId
+        },
+        select: {
+            id: true, 
+            title: true
+        }
+    })
+
+    return quizzes
+}
