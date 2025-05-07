@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 
-export const questionValidator = [
+export const questionsValidator = [
   body('data')
     .isArray({ min: 1 }).withMessage('Data must be an array'),
 
@@ -21,3 +21,22 @@ export const questionValidator = [
   body('data.*.choices.*.is_correct')
     .isBoolean().withMessage('is_correct must be a boolean'),
 ];
+
+export const questionValidator = [
+  body('question')
+    .notEmpty().withMessage('Question is required')
+    .isLength({ min: 3 }).withMessage('Question must be at least 3 characters'),
+
+  body('quiz_id')
+    .notEmpty().withMessage('Quiz ID is required')
+    .isNumeric().withMessage('Quiz ID must be numeric'),
+
+  body('choices')
+    .isArray({ min: 1 }).withMessage('Choices must be a non-empty array'),
+
+  body('choices.*.choice')
+    .notEmpty().withMessage('Choice text is required'),
+
+  body('choices.*.is_correct')
+    .isBoolean().withMessage('is_correct must be a boolean'),
+]

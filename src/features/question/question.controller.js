@@ -36,7 +36,6 @@ export const makeQuestion = async(req, res) => {
             }))
         }))
 
-        // res.send(normalizedData)
         for (const question of normalizedData) {
             const createdQuestion = await createQuestion(question)
             
@@ -51,6 +50,52 @@ export const makeQuestion = async(req, res) => {
         return response(200, normalizedData, 'Successfully add new question', res)
     } catch (error) {
         return res.send(error)
+    }
+}
+
+export const makeOneQuestionAndChoices = async(req, res) => {
+    try {
+        const data  = req.body
+        const quizId = parseInt(data.quiz_id)
+        const userId = parseInt(req.user.id)
+
+        const quizAvailabled = await getQuizById(quizId)
+        if(!quizAvailabled){
+            return response(404, [], 'Quiz not found', res)
+        }
+
+        if(quizAvailabled.created_by !== userId){
+            return response(401, [], 'Youre not creator', res)
+        }
+
+        const isErrorValidation = validationResult(req)
+        if(!isErrorValidation.isEmpty()){
+            return response(422, isErrorValidation.array(), 'Error validation', res)
+        }
+
+        // return res.send('ok')
+
+        const normalizedData = {
+            question: data.question,
+            quiz_id: data.quiz_id,
+            choices: data.choices.map(choice => ({
+                choice: choice.choice,
+                is_correct: choice.is_correct === true || choice.is_correct === 'true'
+            }))
+        }
+
+        const questionCreated = await createQuestion(normalizedData)
+
+        for (const choice of normalizedData.choices) {
+            await createChoice({
+                ...choice,
+                question_id: parseInt(questionCreated.id)
+            })
+        }
+
+        return response(200, normalizedData, 'Successfully add new question', res)
+    } catch (error) {
+        res.status(500).send(error)
     }
 }
 
