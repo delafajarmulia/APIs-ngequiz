@@ -6,5 +6,5 @@ import { makeOneQuestionAndChoices, makeQuestion } from './question.controller.j
 export const router = express.Router()
 
 router.post('s/choice', authenticatedToken, questionsValidator, makeQuestion)
-router.post('/choice', authenticatedToken, questionValidator, makeOneQuestionAndChoices)
+router.post('/choices', authenticatedToken, questionValidator, makeOneQuestionAndChoices)
 // router.get('/', authenticatedToken, seeAllQuestion)
