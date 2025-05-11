@@ -20,6 +20,8 @@ model User {
   password        String
   role            Role    @default(user)
   quizzes         Quiz[]
+  answers         Answer[]
+  results         Result[]
 }
 
 model Quiz {
@@ -30,6 +32,7 @@ model Quiz {
   creator         User    @relation(fields: [created_by], references: [id])
   created_by      Int
   questions       Question[]
+  results         Result[]
 }
 
 model Question {
@@ -38,6 +41,7 @@ model Question {
   quiz            Quiz    @relation(fields: [quiz_id], references: [id])
   quiz_id         Int
   choices         Choice[]
+  answers         Answer[]
 }
 
 model Choice {
@@ -46,4 +50,25 @@ model Choice {
   is_correct      Boolean
   question        Question @relation(fields: [question_id], references: [id])
   question_id     Int
+  answers         Answer[]
+}
+
+model Answer {
+  id              Int     @id @default(autoincrement())
+  user            User    @relation(fields: [user_id], references: [id])
+  user_id         Int
+  question        Question @relation(fields: [question_id], references: [id])
+  question_id     Int
+  choice          Choice   @relation(fields: [choice_id], references: [id])
+  choice_id       Int
+}
+
+model Result {
+  id              Int     @id @default(autoincrement())
+  score           Float
+  submitted_at    DateTime 
+  user            User    @relation(fields: [user_id], references: [id])
+  user_id         Int
+  quiz            Quiz    @relation(fields: [quiz_id], references: [id])
+  quiz_id         Int
 }
