@@ -33,6 +33,26 @@ export const getQuestionById = async(id) => {
     return question
 }
 
+export const getQuestionByIdAndChoice = async(questionId, choiceId) => {
+    const result = await prisma.question.findFirst({
+        where: {
+            id: questionId
+        },
+        include:{
+            choices: {
+                where: {
+                    id: choiceId,
+                },
+                select: {
+                    id:true
+                }
+            }
+        }
+    })
+
+    return result
+}
+
 // export const getAllQuestion = async() => {
 //     // const questions = await prisma.question.findMany({
 //     //     include:{
