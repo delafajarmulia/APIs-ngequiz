@@ -8,6 +8,7 @@ import { router as choiceRoute } from './features/choice/choice.route.js'
 import { router as questionRoute } from './features/question/question.route.js'
 import { router as userRoute } from './features/user/user.route.js'
 import { router as answerRouter } from './features/answer/answer.route.js'
+import { router as resultRouter } from './features/result/result.route.js'
 
 dotenv.config()
 const app = express()
@@ -26,6 +27,7 @@ app.use(mainURL + '/question', questionRoute)
 app.use(mainURL + '/choice', choiceRoute)
 app.use(mainURL + '/user', userRoute)
 app.use(mainURL + '/answer', answerRouter)
+app.use(mainURL + '/result', resultRouter)
 
 app.listen(port, () => {
     console.log(`This server running on port ${port}`)

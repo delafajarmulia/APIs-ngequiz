@@ -11,3 +11,23 @@ export const createAnswer = async(data) => {
 
     return answerAdded
 }
+
+export const getUserAnswer = async(quiz_id, user_id) => {
+    const userAnswers = await prisma.answer.findMany({
+        where:{
+            user_id,
+            question: {
+                quiz_id: quiz_id
+            }
+        },
+        include: {
+            question: {
+                select: {
+                    quiz_id: true
+                }
+            }
+        }
+    })
+
+    return userAnswers
+}
