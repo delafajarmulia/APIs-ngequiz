@@ -1,7 +1,7 @@
 import { response } from "../../utils/response.js"
 import { getUserAnswer } from "../answer/answer.repository.js"
 import { getQuizById } from "../quiz/quiz.repository.js"
-import { createResult } from "./result.repository.js"
+import { createResult, myResult } from "./result.repository.js"
 
 export const makeResult = async(req, res) => {
     const userId = parseInt(req.user.id)
@@ -52,4 +52,16 @@ export const makeResult = async(req, res) => {
 
     const resultAdded = await createResult(data)
     return response(201, resultAdded, 'Successfully add score', res)
+}
+
+export const resultMyQuizDone = async(req, res) => {
+    const userId = parseInt(req.user.id)
+
+    const myResults = await myResult(userId)
+    
+    if(myResults.length < 1){
+        return response(404, [], 'You never try Quiz yet', res)
+    }
+
+    return response(200, myResults, 'Get your quiz done', res)
 }
