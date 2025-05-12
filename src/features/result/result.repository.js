@@ -20,3 +20,16 @@ export const myResult = async(userId) => {
 
     return datas
 }
+
+export const getResultByQuizId = async(quizId) => {
+    const datas = await prisma.result.findMany({
+        where: {
+            quiz_id: quizId
+        },
+        include: {
+            user: true
+        }
+    })
+
+    return datas
+}

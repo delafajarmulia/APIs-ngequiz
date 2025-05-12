@@ -1,7 +1,7 @@
 import { response } from "../../utils/response.js"
 import { getUserAnswer } from "../answer/answer.repository.js"
 import { getQuizById } from "../quiz/quiz.repository.js"
-import { createResult, myResult } from "./result.repository.js"
+import { createResult, getResultByQuizId, myResult } from "./result.repository.js"
 
 export const makeResult = async(req, res) => {
     const userId = parseInt(req.user.id)
@@ -64,4 +64,20 @@ export const resultMyQuizDone = async(req, res) => {
     }
 
     return response(200, myResults, 'Get your quiz done', res)
+}
+
+export const resultById = async(req, res) => {
+    const quizId = parseInt(req.params.id)
+
+    const quizAvailabled = await getQuizById(quizId)
+    if(!quizAvailabled){
+        return response(404, [], 'Quiz not found', res)
+    }
+
+    const datas = await getResultByQuizId(quizId)
+    if(datas.length < 1){
+        return response(404, [], 'no one has done this quiz yet', res)
+    }
+
+    return response(200, datas, 'Get result by quiz id', res)
 }
