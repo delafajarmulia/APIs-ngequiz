@@ -1,6 +1,7 @@
 import { response } from "../../utils/response.js"
 import { validationResult } from "express-validator"
 import { createQuiz, getAllQuiz, getMyQuiz, getQuizById } from "./quiz.repository.js"
+import { myResult } from "../result/result.repository.js"
 
 export const makeQuiz = async(req, res) => {
     try {
@@ -31,13 +32,29 @@ export const takeQuiz = async(req, res) => {
 }
 
 export const seeAllQuiz = async(req, res) => {
+    const userId = parseInt(req.user.id)
     const quizzes = await getAllQuiz()
+    let datas = []
 
     if(!quizzes){
         return response(404, [], 'Quiz not found', res)
     }
 
-    return response(200, quizzes, 'Get all quiz', res)
+    const myResults = await myResult(userId)
+    const userResults = new Map()
+    myResults.map(result => userResults.set(result.quiz_id, result.quiz_id))
+
+    for (const quiz of quizzes) {
+        const selectedUserResult = userResults.get(quiz.id)
+
+        if(!selectedUserResult){
+            datas.push(quiz)
+        } else if (!quiz.is_once){
+            datas.push(quiz)
+        }
+    }
+
+    return response(200, datas, 'Get all quiz', res)
 }
 
 export const takeMyQuiz = async(req, res) => {
