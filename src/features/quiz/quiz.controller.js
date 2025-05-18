@@ -1,6 +1,6 @@
 import { response } from "../../utils/response.js"
 import { validationResult } from "express-validator"
-import { createQuiz, getAllQuiz, getMyQuiz, getQuizById } from "./quiz.repository.js"
+import { createQuiz, getAllQuiz, getAllQuizName, getMyQuiz, getQuizById } from "./quiz.repository.js"
 import { myResult } from "../result/result.repository.js"
 
 export const makeQuiz = async(req, res) => {
@@ -65,4 +65,13 @@ export const takeMyQuiz = async(req, res) => {
         return response(404, [], 'Your Quiz Not Found', res)
     }
     return response(200, quizzes, 'Get all your quiz', res)
+}
+
+export const seeAllQuizName = async(req, res) => {
+    const quizzes = await getAllQuizName()
+
+    if(quizzes.length < 1){
+        return response(404, [], 'Quiz Not Found', res)
+    }
+    return response(200, quizzes, 'Get all quiz name', res)
 }

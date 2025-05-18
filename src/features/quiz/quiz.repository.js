@@ -57,3 +57,14 @@ export const getMyQuiz = async(userId) => {
 
     return quizzes
 }
+
+export const getAllQuizName = async() => {
+    const quizzes = await prisma.quiz.findMany({
+        select: {
+            id: true,
+            title: true
+        }
+    })
+
+    return quizzes
+}
