@@ -28,6 +28,9 @@ export const getResultByQuizId = async(quizId) => {
         },
         include: {
             user: true
+        },
+        orderBy: {
+            score: 'desc'
         }
     })
 
