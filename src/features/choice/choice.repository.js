@@ -11,3 +11,13 @@ export const createChoice = async(newChoice) => {
 
     return choiceAdded
 }
+
+export const deleteChoiceByQuestionId = async(questionId) => {
+    await prisma.choice.deleteMany({
+        where: {
+            question_id: questionId
+        }
+    })
+
+    return
+}

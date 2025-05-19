@@ -36,3 +36,13 @@ export const getResultByQuizId = async(quizId) => {
 
     return datas
 }
+
+export const deleteResultByQuizId = async(quizId) => {
+    await prisma.result.deleteMany({
+        where: {
+            quiz_id: quizId
+        }
+    })
+
+    return
+}

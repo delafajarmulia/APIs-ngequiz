@@ -53,6 +53,28 @@ export const getQuestionByIdAndChoice = async(questionId, choiceId) => {
     return result
 }
 
+export const getQuestionByQuizId = async(quizId) => {
+    const questions = await prisma.question.findMany({
+        where: {
+            quiz_id: quizId
+        },
+        select: {
+            id:true
+        }
+    })
+
+    return questions
+}
+export const deleteQuestionByQuizId = async(quizId) => {
+    await prisma.question.deleteMany({
+        where: {
+            quiz_id: quizId
+        }
+    })
+
+    return 
+}
+
 // export const getAllQuestion = async() => {
 //     // const questions = await prisma.question.findMany({
 //     //     include:{
