@@ -49,9 +49,12 @@ export const getMyQuiz = async(userId) => {
         where: {
             created_by: userId
         },
-        select: {
-            id: true, 
-            title: true
+        include: {
+            _count: {
+                select: {
+                    questions: true
+                }
+            }
         }
     })
 
