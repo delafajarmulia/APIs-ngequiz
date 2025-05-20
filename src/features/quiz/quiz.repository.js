@@ -95,3 +95,16 @@ export const deleteQuiz = async(quizId) => {
 
     return
 }
+
+export const getQuizNameById = async(id) => {
+    const quizName = await prisma.quiz.findUnique({
+        where: {
+            id
+        }, 
+        select: {
+            id: true,
+            title: true
+        }
+    })
+    return quizName
+}

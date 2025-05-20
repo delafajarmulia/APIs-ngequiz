@@ -1,6 +1,6 @@
 import { response } from "../../utils/response.js"
 import { validationResult } from "express-validator"
-import { createQuiz, deleteQuiz, getAllQuiz, getAllQuizName, getMyQuiz, getQuizById, getQuizIdAndCreator } from "./quiz.repository.js"
+import { createQuiz, deleteQuiz, getAllQuiz, getAllQuizName, getMyQuiz, getQuizById, getQuizIdAndCreator, getQuizNameById } from "./quiz.repository.js"
 import { deleteResultByQuizId, myResult } from "../result/result.repository.js"
 import { deleteChoiceByQuestionId } from "../choice/choice.repository.js"
 import { deleteQuestionByQuizId, getQuestionByQuizId } from "../question/question.repository.js"
@@ -104,4 +104,13 @@ export const removeMyQuiz = async(req, res) => {
     await deleteQuiz(quizId)
     
     return response(200, [], 'Successfully delete Quiz', res)
+}
+
+export const takeQuizNameById = async(req, res) => {
+    const quizName = await getQuizNameById(parseInt(req.params.id))
+
+    if(!quizName){
+        return response(404, [], 'Quiz not found', res)
+    }
+    return response(200, quizName, 'Get quiz name by id', res)
 }
