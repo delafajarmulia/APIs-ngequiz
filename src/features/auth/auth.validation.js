@@ -17,7 +17,6 @@ export const registerValidation = [
         .isLength({
             min: 8
         }).withMessage('Password minimal 8 charachter'),
-    body('role', 'Role is required').notEmpty()
 ]
 
 export const loginValidation = [

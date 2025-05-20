@@ -22,7 +22,7 @@ export const createNewUser = async(passwordHashing, newUser) => {
             name: newUser.name,
             email: newUser.email,
             password: passwordHashing,
-            role: newUser.role ? newUser.role : 'user',
+            role: newUser.role ?? 'user',
         }
     })
 
