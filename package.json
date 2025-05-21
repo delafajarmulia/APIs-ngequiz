@@ -6,6 +6,7 @@
   "main": "route.js",
   "scripts": {
     "dev": "nodemon src/route.js",
+    "start": "node src/route.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
