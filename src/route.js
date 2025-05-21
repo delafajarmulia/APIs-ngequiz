@@ -15,7 +15,18 @@ const app = express()
 
 const port = process.env.PORT
 
-app.use(cors())
+const corsOptions = {
+  origin: 'http://localhost:5173', // frontend kamu
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'], // sesuaikan kalau pakai header lain
+  credentials: true,
+  optionsSuccessStatus: 200
+}
+
+app.use(cors(corsOptions))
+
+// Pastikan OPTIONS request di-handle dengan cors juga
+app.options('*', cors(corsOptions))
 
 app.use(express.json())
 
