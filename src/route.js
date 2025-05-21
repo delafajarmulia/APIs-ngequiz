@@ -16,7 +16,10 @@ const app = express()
 const port = process.env.PORT
 
 const corsOptions = {
-  origin: 'http://localhost:5173', // frontend kamu
+  origin: [
+    'http://localhost:5173',
+    'https://ngequiz.netlify.app'
+], // frontend kamu
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'], // sesuaikan kalau pakai header lain
   credentials: true,
