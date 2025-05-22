@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/index.js",
+      "src": "src/route.js",
       "use": "@vercel/node"
     }, {
         "src":"prisma/schema.prisma",
@@ -12,7 +12,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "api/index.js"
+      "dest": "src/route.js"
     }
   ],
   "buildCommand":"npx prisma generate"
