@@ -37,6 +37,7 @@ app.use(express.json())
 
 const mainURL = '/api/v1'
 
+app.get('/', (req, res) => 'Hello world')
 app.use(mainURL + '/user/auth', authRoute)
 app.use(mainURL + '/quiz', quizRoute)
 app.use(mainURL + '/question', questionRoute)
