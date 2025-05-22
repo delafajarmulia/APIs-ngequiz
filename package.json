@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon src/route.js",
     "start": "node src/route.js",
-    "postinstall": "prisma generate",
+    "postinstall": "npx prisma generate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

@@ -4,6 +4,9 @@
     {
       "src": "api/index.js",
       "use": "@vercel/node"
+    }, {
+        "src":"prisma/schema.prisma",
+        "use":"@vercel/static"
     }
   ],
   "routes": [
@@ -11,5 +14,6 @@
       "src": "/(.*)",
       "dest": "api/index.js"
     }
-  ]
+  ],
+  "buildCommand":"npx prisma generate"
 }
