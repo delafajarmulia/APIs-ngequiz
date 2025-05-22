@@ -45,6 +45,6 @@ app.use(mainURL + '/user', userRoute)
 app.use(mainURL + '/answer', answerRouter)
 app.use(mainURL + '/result', resultRouter)
 
-app.listen(port, () => {
-    console.log(`This server running on port ${port}`)
-})
+// app.listen(port, () => {
+//     console.log(`This server running on port ${port}`)
+// })
