@@ -49,3 +49,5 @@ app.use(mainURL + '/result', resultRouter)
 // app.listen(port, () => {
 //     console.log(`This server running on port ${port}`)
 // })
+
+export default app;
