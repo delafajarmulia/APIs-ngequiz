@@ -1,7 +1,7 @@
 import { validationResult } from "express-validator"
 import { response } from "../../utils/response.js"
 import { getQuestionByIdAndChoice } from "../question/question.repository.js"
-import { createAnswer } from "./answer.repository.js"
+import { createAnswer, getUserAnswer } from "./answer.repository.js"
 
 export const submitAnswer = async(req, res) => {
     const userId = parseInt(req.user.id)
@@ -30,4 +30,13 @@ export const submitAnswer = async(req, res) => {
     const answerCreated = await createAnswer(data)
 
     return response(200, answerCreated, 'Answer submitted', res)
+}
+
+export const userAnswer = async(req, res) => {
+    const userId = parseInt(req.user.id)
+    const quizId = parseInt(req.params.quizId)
+
+    const answers = await getUserAnswer(quizId, userId)
+
+    return response(200, answers, 'Get user answer by quiz id', res)
 }
