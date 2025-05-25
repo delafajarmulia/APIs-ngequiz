@@ -31,3 +31,10 @@ export const loginValidation = [
             min: 8
         }).withMessage('Password minimal 8 charachter'),
 ]
+
+export const loginGoogleValidation = [
+    body('email', 'Email is required')
+        .notEmpty()
+        .trim()
+        .isEmail().withMessage('Please input valid Email'),
+]

@@ -64,3 +64,31 @@ export const login = async(req, res) => {
         res.send(error)
     }
 }
+
+export const loginGoogle = async(req, res) => {
+    try {
+        const email = req.body.email
+
+        const isErrorValidation = validationResult(req)
+        if(!isErrorValidation.isEmpty()){
+            return response(422, isErrorValidation.array(), 'Validation error', res)
+        }
+
+        const userAvailabled = await getUserByEmail(email)
+        if(!userAvailabled){
+            return response(404, [], 'User does not exist', res)
+        }
+
+        const payload = {
+            id: userAvailabled.id,
+            email: userAvailabled.email,
+            role: userAvailabled.role
+        }
+
+        const token = jwt.sign(payload, jwtSecret, {expiresIn: "1h"})
+
+        return response(200, token, 'Successfully login', res)
+    } catch (error) {
+        res.send(error)
+    }
+}
