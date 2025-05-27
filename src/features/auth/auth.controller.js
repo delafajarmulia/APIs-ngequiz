@@ -1,6 +1,6 @@
 import { validationResult } from 'express-validator'
 import { response } from '../../utils/response.js'
-import { getUserByEmail, createNewUser } from './auth.repository.js'
+import { getUserByEmail, createNewUser, createNewUserByGoogle } from './auth.repository.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
@@ -76,7 +76,7 @@ export const loginGoogle = async(req, res) => {
 
         const userAvailabled = await getUserByEmail(email)
         if(!userAvailabled){
-            return response(404, [], 'User does not exist', res)
+            const regist = await registWithGoogle(req, res)
         }
 
         const payload = {
@@ -88,6 +88,34 @@ export const loginGoogle = async(req, res) => {
         const token = jwt.sign(payload, jwtSecret, {expiresIn: "1h"})
 
         return response(200, token, 'Successfully login', res)
+    } catch (error) {
+        res.send(error)
+    }
+}
+
+export const registWithGoogle = async(req, res) => {
+    try {
+        const user = req.body;
+
+        // ✅ HARUS pakai req, bukan user
+        const isErrorValidation = validationResult(req);
+        if (!isErrorValidation.isEmpty()) {
+            return response(422, isErrorValidation.array(), 'Validation error', res);
+        }
+
+        const userAvailabled = await getUserByEmail(user.email)
+        if(userAvailabled){
+            const login = await loginGoogle(req, res)
+        }
+
+        // const passwordHashing = await bcrypt.hash(user.password, 10)
+        const newUser = await createNewUserByGoogle( user)
+
+        if(newUser){
+            const login = await loginGoogle(req, res)
+        }
+       
+        // return response(200, newUser, 'Successfully add new user', res);
     } catch (error) {
         res.send(error)
     }

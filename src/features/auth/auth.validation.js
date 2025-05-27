@@ -21,20 +21,30 @@ export const registerValidation = [
 
 export const loginValidation = [
     body('email', 'Email is required')
-        .notEmpty()
-        .trim()
-        .isEmail().withMessage('Please input valid Email'),
+    .notEmpty()
+    .trim()
+    .isEmail().withMessage('Please input valid Email'),
     body('password', 'Password is required')
-        .notEmpty()
+    .notEmpty()
         .trim()
         .isLength({
             min: 8
         }).withMessage('Password minimal 8 charachter'),
-]
-
-export const loginGoogleValidation = [
-    body('email', 'Email is required')
+    ]
+    
+    export const loginGoogleValidation = [
+        body('email', 'Email is required')
         .notEmpty()
         .trim()
         .isEmail().withMessage('Please input valid Email'),
-]
+    ]
+
+    export const registerGoogleValidation = [
+        body('name', 'Name is required')
+            .trim()
+            .notEmpty(),
+        body('email', 'Email is required')
+            .notEmpty()
+            .trim()
+            .isEmail().withMessage('Please input valid Email'),
+    ]

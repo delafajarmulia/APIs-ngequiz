@@ -28,3 +28,15 @@ export const createNewUser = async(passwordHashing, newUser) => {
 
     return userAdded
 }
+
+export const createNewUserByGoogle = async(newUser) => {
+    const userAdded = await prisma.user.create({
+        data: {
+            name: newUser.name,
+            email: newUser.email,
+            role: newUser.role ?? 'user',
+        }
+    })
+
+    return userAdded
+}
