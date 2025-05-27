@@ -1,6 +1,6 @@
 import { validationResult } from 'express-validator'
 import { response } from '../../utils/response.js'
-import { getUserByEmail, createNewUser, createNewUserByGoogle } from './auth.repository.js'
+import { getUserByEmail, createNewUser, createNewUserByGoogle, updateUserPw } from './auth.repository.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
@@ -41,14 +41,19 @@ export const login = async(req, res) => {
             return response(422, isErrorValidation.array(), 'Validation error', res)
         }
 
-        const userAvailabled = await getUserByEmail(user.email)
+        let userAvailabled = await getUserByEmail(user.email)
         if(!userAvailabled){
             return response(404, [], 'User does not exist', res)
         }
 
-        const passwordCheck = await bcrypt.compare(pw, userAvailabled.password)
-        if(!passwordCheck){
-            return response(401, [], 'Invalid password', res)
+        if(!userAvailabled.password){
+            const passwordHashing = await bcrypt.hash(pw, 10)
+            userAvailabled = await updateUserPw(user.email, passwordHashing)
+        } else {
+            const passwordCheck = await bcrypt.compare(pw, userAvailabled.password)
+            if(!passwordCheck){
+                return response(401, [], 'Invalid password', res)
+            }
         }
 
         const payload = {

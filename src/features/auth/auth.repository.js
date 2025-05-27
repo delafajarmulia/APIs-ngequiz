@@ -40,3 +40,16 @@ export const createNewUserByGoogle = async(newUser) => {
 
     return userAdded
 }
+
+export const updateUserPw = async(email, hashingPw) => {
+    const updatedUserPw = await prisma.user.update({
+        where: {
+            email
+        },
+        data: {
+            password: hashingPw
+        }
+    })
+
+    return updateUserPw
+}
