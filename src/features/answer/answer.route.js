@@ -6,4 +6,5 @@ import { submitAnswerValidation } from './answer.validation.js'
 export const router = express.Router()
 
 router.post('/submit-answer', authenticatedToken, submitAnswerValidation, submitAnswer)
-router.get('/quiz/:quizId', authenticatedToken, userAnswer)
+router.get('/result/:resultId', authenticatedToken, userAnswer)
+// router.get('/:id', authenticatedToken, userAnswer)

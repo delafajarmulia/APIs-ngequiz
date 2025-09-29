@@ -1,57 +1,74 @@
 import { response } from "../../utils/response.js"
 import { getUserAnswer } from "../answer/answer.repository.js"
+import { getQuestionCountByQuizId } from "../question/question.repository.js"
 import { getQuizById } from "../quiz/quiz.repository.js"
-import { createResult, getResultByQuizId, myResult } from "./result.repository.js"
+import { createResult, getResultById, getResultByQuizId, myResult, updateResult } from "./result.repository.js"
 
+// make result cuma buat initialisasi resultnya aja, pointnya nanti di update result
 export const makeResult = async(req, res) => {
     const userId = parseInt(req.user.id)
     const quizId = parseInt(req.body.quiz_id)
-    let answerCorrect = 0
-
-    const quiz = await getQuizById(quizId)
-    if(!quiz){
-        return response(404, [], 'Quiz not found', res)
-    }
-
-    const questions = quiz.questions
-    const questionCount = questions.length
-
-    const userAnswer = await getUserAnswer(quizId, userId)
-
-    if(userAnswer.length < 1){
-        return response(404, [], 'User dont play this quiz', res)
-    }
-
-    const userAnswerMap = new Map()
-    for (const answer of userAnswer) {
-        // set untuk map yang menyimpan key: value, spt dictionary
-        userAnswerMap.set(answer.question_id, answer.choice_id)
-    }
-
-    for (const question of questions) {
-        // iniMap.get(..) -> ambil value berdasarkan key
-        const selectedChoiceId = userAnswerMap.get(question.id)
-        
-        // array.some(..) -> untuk return boolean
-        const correct = question.choices.some(choice => 
-            choice.id === selectedChoiceId && choice.is_correct
-        )
-
-        if(correct) answerCorrect++
-    }
-
-    let score = answerCorrect / questionCount * 100
-    score = Number.isInteger(score) ? score : parseFloat(score.toFixed(2))
-
+    
     const data = {
-        score,
-        submitted_at: new Date(),
+        score: 0,
         user_id: userId,
-        quiz_id: quizId
+        quiz_id: quizId,
+        submitted_at: new Date()
     }
 
     const resultAdded = await createResult(data)
     return response(201, resultAdded, 'Successfully add score', res)
+}
+
+export const changeResult = async(req, res) => {
+    const resultId = parseInt(req.body.result_id)
+    const choiceId = parseInt(req.body.choice_id)
+    const questionId = parseInt(req.body.question_id)
+
+    const result = await getResultById(resultId, questionId) // 42 = questionId
+
+    let isCorrect = 0
+
+    result.quiz.questions.map(ques => {
+        isCorrect = ques.choices.find(choice => choice.is_correct === true)
+
+        isCorrect.id === choiceId ? isCorrect = 1 : isCorrect = 0 
+    })
+
+    let data
+    const quizId = parseInt(result.quiz_id)
+
+    if(isCorrect === 1){
+        const point = await pointCount(quizId)
+    
+        data = {
+            score: result.score + point,
+            submitted_at: new Date()
+        }
+    } else {
+        data = {
+            score: result.score,
+            submitted_at: new Date()
+        }
+    }
+
+    const resultUpdated = await updateResult(resultId, data)
+
+    const update = {
+        score: resultUpdated.score,
+        is_correct: isCorrect === 1 ? true : false
+    }
+
+    return response(201, update, 'Successfully update score', res)
+}
+
+const pointCount = async(quizId) => {
+    let questionCount = await getQuestionCountByQuizId(quizId)
+    questionCount = questionCount._count.questions
+
+    const point = Number((100 / questionCount).toFixed(2))
+
+    return point
 }
 
 export const resultMyQuizDone = async(req, res) => {
@@ -67,17 +84,17 @@ export const resultMyQuizDone = async(req, res) => {
 }
 
 export const resultById = async(req, res) => {
-    const quizId = parseInt(req.params.id)
+    const resultId = parseInt(req.params.id)
 
-    const quizAvailabled = await getQuizById(quizId)
+    const quizAvailabled = await getQuizById(resultId)
     if(!quizAvailabled){
         return response(404, [], 'Quiz not found', res)
     }
 
-    const datas = await getResultByQuizId(quizId)
-    if(datas.length < 1){
-        return response(404, [], 'no one has done this quiz yet', res)
-    }
+    const datas = await getResultById(resultId)
+    // if(datas.length < 1){
+    //     return response(404, [], 'no one has done this quiz yet', res)
+    // }
 
     return response(200, datas, 'Get result by quiz id', res)
 }

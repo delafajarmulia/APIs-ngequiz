@@ -33,6 +33,23 @@ export const getQuestionById = async(id) => {
     return question
 }
 
+export const getQuestionCountByQuizId = async(quizId) => {
+    const questionCount = await prisma.quiz.findFirst({
+        where: {
+            id: quizId
+        },
+        include: {
+            _count: {
+                select: {
+                    questions: true
+                }
+            }
+        }
+    })
+
+    return questionCount
+}
+
 export const getQuestionByIdAndChoice = async(questionId, choiceId) => {
     const result = await prisma.question.findFirst({
         where: {
