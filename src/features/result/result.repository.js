@@ -50,12 +50,17 @@ export const getResultByQuizId = async(quizId) => {
         where: {
             quiz_id: quizId
         },
-        include: {
-            user: true
+        select: {
+            score: true,
+            user: {
+                select: {
+                    name: true
+                }
+            }
         },
         orderBy: {
             score: 'desc'
-        }
+        }, 
     })
 
     return datas
@@ -83,4 +88,19 @@ export const deleteResultByQuizId = async(quizId) => {
     })
 
     return
+}
+
+export const getUserScoreById = async(userId, resultId) => {
+    const data = await prisma.result.findFirst({
+        where: {
+            id: resultId,
+            user_id: userId
+        },
+        select: {
+            id: true,
+            score: true,
+        }
+    })
+
+    return data
 }
