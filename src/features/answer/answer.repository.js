@@ -29,10 +29,10 @@ export const getUserAnswer = async(resultId) => {
     return userAnswer
 }
 
-export const deleteAnswerByQuestionId = async(questionId) => {
+export const deleteAnswerByChoiceId = async(choiceId) => {
     await prisma.answer.deleteMany({
         where: {
-            question_id: questionId
+            choice_id: choiceId
         }
     })
     return

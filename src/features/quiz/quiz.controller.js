@@ -2,9 +2,9 @@ import { response } from "../../utils/response.js"
 import { validationResult } from "express-validator"
 import { createQuiz, deleteQuiz, getAllQuiz, getAllQuizName, getMyQuiz, getQuizById, getQuizIdAndCreator, getQuizNameById } from "./quiz.repository.js"
 import { deleteResultByQuizId, myResult } from "../result/result.repository.js"
-import { deleteChoiceByQuestionId } from "../choice/choice.repository.js"
+import { deleteChoiceByQuestionId, getChoicesByQuestionId } from "../choice/choice.repository.js"
 import { deleteQuestionByQuizId, getQuestionByQuizId } from "../question/question.repository.js"
-import { deleteAnswerByQuestionId } from "../answer/answer.repository.js"
+import { deleteAnswerByChoiceId } from "../answer/answer.repository.js"
 
 export const makeQuiz = async(req, res) => {
     try {
@@ -93,7 +93,11 @@ export const removeMyQuiz = async(req, res) => {
     const questions = await getQuestionByQuizId(quizId) 
 
     for (const question of questions){
-        await deleteAnswerByQuestionId(question.id)
+        // await deleteAnswerByQuestionId(question.id)
+        const choices = await getChoicesByQuestionId(question.id)
+        for (const choice of choices){
+            await deleteAnswerByChoiceId(choice.id)
+        }
         await deleteChoiceByQuestionId(question.id)
     }
 

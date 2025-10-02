@@ -15,6 +15,9 @@ export const myResult = async(userId) => {
         },
         include: {
             quiz: true
+        },
+        orderBy: {
+            submitted_at: 'desc'
         }
     })
 
