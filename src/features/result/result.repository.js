@@ -102,6 +102,7 @@ export const getUserScoreById = async(userId, resultId) => {
         select: {
             id: true,
             score: true,
+            submitted_at: true
         }
     })
 
