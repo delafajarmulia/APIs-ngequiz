@@ -38,6 +38,9 @@ export const getAllQuiz = async() => {
                     name:true
                 }
             }
+        },
+        orderBy: {
+            id: 'desc'
         }
     })
 
