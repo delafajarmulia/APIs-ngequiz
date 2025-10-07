@@ -5,11 +5,17 @@ import { deleteResultByQuizId, myResult } from "../result/result.repository.js"
 import { deleteChoiceByQuestionId, getChoicesByQuestionId } from "../choice/choice.repository.js"
 import { deleteQuestionByQuizId, getQuestionByQuizId } from "../question/question.repository.js"
 import { deleteAnswerByChoiceId } from "../answer/answer.repository.js"
+import { customAlphabet } from "nanoid"
+
+const nanoid = customAlphabet('1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 12)
 
 export const makeQuiz = async(req, res) => {
     try {
         const newQuiz = req.body
         const userId = parseInt(req.user.id) // dapet dari authenticated token)
+        const shareCode = nanoid()
+
+        newQuiz.share_code = shareCode
 
         const isErrorValidation = validationResult(req)
         if(!isErrorValidation.isEmpty()){

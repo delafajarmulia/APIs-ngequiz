@@ -2,7 +2,7 @@ import { response } from "../../utils/response.js"
 import { getUserAnswer } from "../answer/answer.repository.js"
 import { getQuestionCountByQuizId } from "../question/question.repository.js"
 import { getQuizById } from "../quiz/quiz.repository.js"
-import { createResult, getResultById, getResultByQuizId, getUserScoreById, myResult, updateResult } from "./result.repository.js"
+import { createResult, getPlayMyQuiz, getResultById, getResultByQuizId, getUserScoreAndNameById, getUserScoreById, myResult, updateResult } from "./result.repository.js"
 
 // make result cuma buat initialisasi resultnya aja, pointnya nanti di update result
 export const makeResult = async(req, res) => {
@@ -112,14 +112,42 @@ export const resultByQuizId = async(req, res) => {
 }
 
 export const userScore = async(req, res) => {
-    const userId = parseInt(req.user.id)
     const resultId = parseInt(req.params.id)
+    const { include } = req.query
 
-    const score = await getUserScoreById(userId, resultId)
+    let score
+
+    if(include && include === 'user'){
+        score = await getUserScoreAndNameById(resultId)
+    } else {
+        score = await getUserScoreById(resultId)
+    }
 
     if(!score){
         return response(404, {}, 'Result not found', res)
     } else {
         return response(200, score, 'Get your score', res)
     }
+}
+
+export const whoPlayMyQuiz = async(req, res) => {
+    const userId = parseInt(req.user.id)
+    const quizId = parseInt(req.params.id)
+
+    const quizAvailabled = await getQuizById(quizId)
+    if(!quizAvailabled){
+        return response(404, [], 'Quiz not found', res)
+    }
+
+    if(quizAvailabled.created_by !== userId){
+        return response(403, [], 'You are not allowed to see who play your quiz', res)
+    }
+
+    const played = await getPlayMyQuiz(quizId)
+
+    if(played.length < 1){
+        return response(404, [], 'No one has played your quiz yet', res)
+    }
+
+    return response(200, played, 'Get who play your quiz', res)
 }

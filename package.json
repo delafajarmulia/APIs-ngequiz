@@ -23,6 +23,7 @@
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
+    "nanoid": "^5.1.6",
     "nodemon": "^3.1.9",
     "prisma": "^6.5.0",
     "serverless-http": "^3.2.0"

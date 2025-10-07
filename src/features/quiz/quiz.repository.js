@@ -6,7 +6,9 @@ export const createQuiz = async(creatorId, newQuiz) => {
             title: newQuiz.title,
             description: newQuiz.description,
             is_once: newQuiz.is_once,
-            created_by: creatorId
+            created_by: creatorId,
+            created_at: new Date(),
+            share_code: newQuiz.share_code
         }
     })
 

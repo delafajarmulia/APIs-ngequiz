@@ -31,6 +31,8 @@ model Quiz {
   title           String
   description     String?
   is_once         Boolean
+  created_at      DateTime? @default(now())
+  share_code      String? @unique
   creator         User    @relation(fields: [created_by], references: [id])
   created_by      Int
   questions       Question[]

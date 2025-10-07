@@ -93,16 +93,64 @@ export const deleteResultByQuizId = async(quizId) => {
     return
 }
 
-export const getUserScoreById = async(userId, resultId) => {
+export const getUserScoreById = async(resultId) => {
     const data = await prisma.result.findFirst({
         where: {
             id: resultId,
-            user_id: userId
         },
         select: {
             id: true,
             score: true,
             submitted_at: true
+        }
+    })
+
+    return data
+}
+
+export const getUserScoreAndNameById = async(resultId) => {
+    const data = await prisma.result.findFirst({
+        where: {
+            id: resultId,
+        },
+        select: {
+            id: true,
+            score: true,
+            submitted_at: true,
+            user: {
+                select: {
+                    name: true
+                }
+            }
+        },
+    })
+
+    return data
+}
+
+export const getPlayMyQuiz = async(quizId) => {
+    const data = await prisma.result.findMany({
+        where: {
+            quiz_id: quizId
+        },
+        select: {
+            id: true,
+            user: {
+                select: {
+                    id: true,
+                    name: true
+                }
+            },
+            quiz: {
+                select: {
+                    id: true,
+                }
+            },
+            score: true,
+            submitted_at: true
+        },
+        orderBy: {
+            score: 'desc'
         }
     })
 
